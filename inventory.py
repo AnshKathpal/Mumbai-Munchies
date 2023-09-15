@@ -6,15 +6,17 @@ import pyfiglet
 
 added = pyfiglet.figlet_format("Snack Added")
 already = pyfiglet.figlet_format("Snack Already Exists")
+removed = pyfiglet.figlet_format("Snack Removed")
+sale = pyfiglet.figlet_format("Snack Sold")
 
 
 class Inventory:
     def __init__(self):
         self.snacks = []
         self.sales_records = []
+        self.load_inventory_from_file("inventory_data.txt")
 
     def addSnack(self, id, name, price, availability, quantity):
-
         for snack in self.snacks:
             if snack.id == id:
                 print("------------------------------------------------")
@@ -25,61 +27,86 @@ class Inventory:
                 print("------------------------")
                 return
 
-        snack = Snack(id=id, name=name, price=price,
-                      availability=availability, quantity=quantity)
+        snack = Snack(id=id, name=name, price=price, availability=availability, quantity=quantity)
         self.snacks.append(snack)
         print("------------------------------------------------")
         print(f"Snack with id {id} is added to the inventory.")
         print("------------------------------------------------")
-        print("------------------------")
+        print("------------------------>")
         print(added)
-        print("------------------------")
+        print("------------------------>")
 
     def removeSnack(self, id):
-
         for snack in self.snacks:
             if snack.id == id:
                 self.snacks.remove(snack)
-                print(
-                    f"Snack with ID {id} has been removed from the inventory.")
+                print("------------------------------------------------")
+                print(f"Snack with ID {id} has been removed from the inventory.")
+                print("------------------------------------------------")
+                print("------------------------>")
+                print(removed)
+                print("------------------------>")
                 break
         else:
+            print("------------------------------------------------")
             print(f"No snack with ID {id} found in the inventory.")
+            print("------------------------------------------------")
 
     def get_all_snacks(self):
         snack_details = []
         for snack in self.snacks:
             snack_details.append(
-                f"ID: {snack.id}, Name: {snack.name}, Price: {snack.price}, Availability: {snack.available} Quantity: {snack.quantity}")
+                f"ID: {snack.id}, Name: {snack.name}, Price: {snack.price}, Availability: {snack.available}, Quantity: {snack.quantity}")
         return snack_details
 
     def record_sale(self, snack_id, quantity_sold):
-        # Find the snack with the specified ID
         for snack in self.snacks:
             if snack.id == snack_id:
                 if snack.available == "Yes":
                     if quantity_sold <= 0:
+                        print("------------------------------------------------")
                         print("Invalid quantity. Please enter a positive quantity.")
+                        print("------------------------------------------------")
+                        return
                 elif snack.quantity < quantity_sold:
+                    print("------------------------------------------------")
                     print("Not enough snacks available.")
+                    print("------------------------------------------------")
                 else:
-                    # Calculate the total amount for the sale
                     total_amount = snack.price * quantity_sold
-                    # Create a new sales record
                     sale_record = SalesRecord(
                         id=len(self.sales_records) + 1,
                         snack_id=snack.id,
                         quantity=quantity_sold,
                         total_amount=total_amount
                     )
-                    # Add the sales record to the list
                     self.sales_records.append(sale_record)
-                    # Update the snack's quantity
                     snack.quantity -= quantity_sold
-                    print(
-                        f"Sale recorded. Total amount: ${total_amount:.2f}")
-            else:
-                print("This snack is not available for sale.")
-            break
+                    print("------------------------>")
+                    print(sale)
+                    print("------------------------>")
+                    print(f"Sale recorded. Total amount: ${total_amount:.2f}")
+                break
         else:
+            print("------------------------------------------------")
             print(f"No snack with ID {snack_id} found in the inventory.")
+            print("------------------------------------------------")
+
+    def save_inventory_to_file(self, filename):
+        with open(filename, 'w') as file:
+            for snack in self.snacks:
+                file.write(f"{snack.id},{snack.name},{snack.price},{snack.available},{snack.quantity}\n")
+
+    def load_inventory_from_file(self, filename):
+        try:
+            with open(filename, 'r') as file:
+                for line in file:
+                    id, name, price, available, quantity = line.strip().split(',')
+                    id = int(id)
+                    price = float(price)
+                    quantity = int(quantity)
+                    snack = Snack(id, name, price, available, quantity)
+                    self.snacks.append(snack)
+        except FileNotFoundError:
+            pass
+

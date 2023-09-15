@@ -1,8 +1,9 @@
-from main import Snack
+# from main import Snack
 from inventory import Inventory
 import pyfiglet
 
 text = pyfiglet.figlet_format("Welcome to Mumbai Munchies", width = 150)
+updated = pyfiglet.figlet_format("Snack Updated")
 
 
 
@@ -13,6 +14,7 @@ text = pyfiglet.figlet_format("Welcome to Mumbai Munchies", width = 150)
 
 # Create an instance of the Inventory class
 inventory = Inventory()
+inventory.load_inventory_from_file("inventory_data.txt")
 
 
 
@@ -52,10 +54,17 @@ while True:
         for snack in inventory.snacks:
             if snack.id == id:
                 snack.update_availability(updated_availability, updated_quantity)
+                print("--------------------------------------------")
                 print(f"Availability for Snack with ID {id} updated to {updated_availability} and quantity to {updated_quantity}.")
+                print("--------------------------------------------")
+                print("------------------------>")
+                print(updated)
+                print("------------------------>")
                 break
         else:
+            print("--------------------------------------------")
             print(f"No snack with ID {id} found in the inventory.")
+            print("--------------------------------------------")
 
     elif choice == '3':
         id = int(input("Enter Snack ID to remove: "))
@@ -74,7 +83,10 @@ while True:
             print("--------------------------------------------")
 
     elif choice == '6':
+        print("--------------------------------------------")
         print("Exiting the program.")
+        print("--------------------------------------------")
+        inventory.save_inventory_to_file("inventory_data.txt")
         break
 
     else:
