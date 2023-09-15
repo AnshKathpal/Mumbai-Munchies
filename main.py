@@ -68,9 +68,6 @@ def select_user_role():
             print("--------------------------------------------------")  
 
 
-
-
-
 class Snack:
     def __init__(self, id, name, price, availability, quantity):
         self.id = id
