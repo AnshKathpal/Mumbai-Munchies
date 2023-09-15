@@ -67,7 +67,6 @@ while True:
             print("--------------------------------------------")
 
     elif choice == '3':
-        id = int(input("Enter Snack ID to remove: "))
         inventory.removeSnack(id)
 
     elif choice == '4':

@@ -37,16 +37,37 @@ class Inventory:
         print("------------------------>")
 
     def removeSnack(self, id):
+        snack_details = self.get_all_snacks()
+        if not snack_details:
+            print("------------------------------------------------")
+            print("No snacks in the inventory to remove.")
+            print("------------------------------------------------")
+            return
+        print("------------------------------------------------")
+        print("Snack Details:")
+        for snack_detail in snack_details:
+            print(snack_detail)
+        print("------------------------------------------------")
+        id = int(input("Enter the ID of the snack you want to remove: "))
+        snack_to_remove = None
         for snack in self.snacks:
             if snack.id == id:
-                self.snacks.remove(snack)
-                print("------------------------------------------------")
-                print(f"Snack with ID {id} has been removed from the inventory.")
-                print("------------------------------------------------")
-                print("------------------------>")
-                print(removed)
-                print("------------------------>")
+                snack_to_remove = snack
                 break
+        if snack_to_remove:
+                confirmation = input(f"Are you sure you want to remove snack with ID {id}? (yes/no): ").strip().lower()
+                if confirmation == "yes":
+                   self.snacks.remove(snack_to_remove)
+                   print("------------------------------------------------")
+                   print(f"Snack with ID {id} has been removed from the inventory.")
+                   print("------------------------------------------------")
+                   print("------------------------>")
+                   print(removed)
+                   print("------------------------>")
+                else:
+                    print("------------------------------------------------")
+                    print("Snack removal canceled.")
+                    print("------------------------------------------------")
         else:
             print("------------------------------------------------")
             print(f"No snack with ID {id} found in the inventory.")
@@ -103,18 +124,20 @@ class Inventory:
         try:
             with open(filename, 'r') as file:
                 for line in file:
-                    id, name, price, available, quantity = line.strip().split(',')
-                    id = int(id)
-                    price = float(price)
-                    quantity = int(quantity)
-                    snack_exists = False
-                    for snack in self.snacks:
-                        if snack.id == id:
-                            snack_exists = True
-                            break
-                    if not snack_exists:
-                       snack = Snack(id, name, price, available, quantity)
-                       self.snacks.append(snack)
+                    values = line.strip().split(',')
+                    if len(values) == 5:
+                        id, name, price, available, quantity = values
+                        id = int(id)
+                        price = float(price)
+                        quantity = int(quantity)
+                        snack_exists = False
+                        for snack in self.snacks:
+                           if snack.id == id:
+                              snack_exists = True
+                              break
+                        if not snack_exists:
+                            snack = Snack(id, name, price, available, quantity)
+                            self.snacks.append(snack)
         except FileNotFoundError:
             pass
 
