@@ -39,10 +39,14 @@ while True:
     print("-----------------")
     print("5. Show All Snacks")
     print("---------------------")
-    print("6. Exit")
+    print("6. Bulk Update")
+    print("---------------------")
+    print("7. Bulk Remove")
+    print("---------------------")
+    print("8. Exit")
     print("----------")
 
-    choice = input("Enter your choice (1/2/3/4/5/6): ")
+    choice = input("Enter your choice (1/2/3/4/5/6/7): ")
 
     if choice == '1':
 
@@ -53,7 +57,8 @@ while True:
             price = float(input("Enter Snack Price: "))
             availability = input("Is the Snack Available (True/False): ")
             quantity = int(input("Enter Snack Quantity: "))
-            inventory.addSnack(id, name, price, availability, quantity)
+            category = input("Enter Category from (beverages/snacks/desserts): ")
+            inventory.addSnack(id, name, price, availability, quantity ,category)
         else:
             print("---------------------------------------------------------------------")
             print("Permission denied. You don't have the required role for this action.")
@@ -112,6 +117,23 @@ while True:
             print("--------------------------------------------")
 
     elif choice == '6':
+        if inventory.can_update_snack():
+            inventory.bulk_update_snacks()
+        else:
+            print("---------------------------------------------------------------------")
+            print("Permission denied. You don't have the required role for this action.")
+            print("---------------------------------------------------------------------") 
+
+
+    elif choice == '7':  
+        if inventory.can_remove_snack():
+            inventory.bulk_remove_snacks()
+        else:
+            print("---------------------------------------------------------------------")
+            print("Permission denied. You don't have the required role for this action.")
+            print("---------------------------------------------------------------------")         
+
+    elif choice == '8':
         print("--------------------------------------------")
         print("Exiting the program.")
         print("--------------------------------------------")

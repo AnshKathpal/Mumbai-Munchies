@@ -69,12 +69,13 @@ def select_user_role():
 
 
 class Snack:
-    def __init__(self, id, name, price, availability, quantity):
+    def __init__(self, id, name, price, availability, quantity,category):
         self.id = id
         self.name = name
         self.price = price
         self.available = availability
         self.quantity = quantity
+        self.category = category
 
     def update_availability(self,updated_availability, updated_quantity):
         self.available = updated_availability

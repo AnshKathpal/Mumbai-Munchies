@@ -12,7 +12,8 @@ sale = pyfiglet.figlet_format("Snack Sold")
 
 class Inventory:
     def __init__(self):
-        self.snacks = []
+        self.snacks = {}
+        # self.snacks = []
         self.sales_records = []
         self.current_user_role = None
         self.load_inventory_from_file("inventory_data.txt") 
@@ -42,8 +43,10 @@ class Inventory:
     
 
 
-    def addSnack(self, id, name, price, availability, quantity):
-        for snack in self.snacks:
+    def addSnack(self, id, name, price, availability, quantity, category):
+        if category not in self.snacks:
+            self.snacks[category] = []
+        for snack in self.snacks[category]:
             if snack.id == id:
                 print("------------------------------------------------")
                 print(f"A snack with ID {id} already exists.")
@@ -53,10 +56,11 @@ class Inventory:
                 print("------------------------")
                 return
 
-        snack = Snack(id=id, name=name, price=price, availability=availability, quantity=quantity)
-        self.snacks.append(snack)
+        snack = Snack(id=id, name=name, price=price, availability=availability, quantity=quantity, category=category)
+        # self.snacks.append(snack)
+        self.snacks[category].append(snack)
         print("------------------------------------------------")
-        print(f"Snack with id {id} is added to the inventory.")
+        print(f"Snack with id {id} is added to {category} category in the inventory.")
         print("------------------------------------------------")
         print("------------------------>")
         print(added)
@@ -76,14 +80,15 @@ class Inventory:
         print("------------------------------------------------")
         id = int(input("Enter the ID of the snack you want to remove: "))
         snack_to_remove = None
-        for snack in self.snacks:
-            if snack.id == id:
-                snack_to_remove = snack
-                break
+        for category, snacks in self.snacks.items():
+            for snack in snacks:
+                if snack.id == id:
+                    snack_to_remove = snack
+                    break
         if snack_to_remove:
                 confirmation = input(f"Are you sure you want to remove snack with ID {id}? (yes/no): ").strip().lower()
                 if confirmation == "yes":
-                   self.snacks.remove(snack_to_remove)
+                   self.snacks[snack_to_remove.category].remove(snack_to_remove)
                    print("------------------------------------------------")
                    print(f"Snack with ID {id} has been removed from the inventory.")
                    print("------------------------------------------------")
@@ -99,11 +104,72 @@ class Inventory:
             print(f"No snack with ID {id} found in the inventory.")
             print("------------------------------------------------")
 
+
+    def bulk_update_snacks(self):
+        print("Bulk Update Snacks:")
+        category = input("Enter Category to update (beverages/snacks/desserts): ").strip()
+        if category not in self.snacks:
+            print(f"No snacks found in the '{category}' category.")
+            return
+
+        updated_availability = input("Enter Updated Availability (True/False): ").capitalize()
+
+        for snack in self.snacks[category]:
+            snack.update_availability(updated_availability)
+
+        print("--------------------------------------------")
+        print(f"Availability for all snacks in the '{category}' category updated to {updated_availability}.")
+        print("--------------------------------------------")        
+
+
+    def bulk_remove_snacks(self):
+        print("Bulk Remove Snacks:")
+        category = input("Enter Category to remove snacks from (beverages/snacks/desserts): ").strip()
+        if category not in self.snacks:
+            print(f"No snacks found in the '{category}' category.")
+            return
+
+        snacks_to_remove = []
+        ids_to_remove = input("Enter IDs of snacks to remove (comma-separated): ").strip().split(',')
+        for id in ids_to_remove:
+            id = int(id.strip())
+            for snack in self.snacks[category]:
+                if snack.id == id:
+                    snacks_to_remove.append(snack)
+                    break
+
+        if snacks_to_remove:
+            print("------------------------------------------------")
+            print("Snacks to Remove:")
+            for snack in snacks_to_remove:
+                print(f"ID: {snack.id}, Name: {snack.name}")
+            print("------------------------------------------------")
+
+            confirmation = input(f"Are you sure you want to remove these snacks? (yes/no): ").strip().lower()
+            if confirmation == "yes":
+                for snack in snacks_to_remove:
+                    self.snacks[category].remove(snack)
+                print("------------------------------------------------")
+                print("Selected snacks have been removed from the inventory.")
+                print("------------------------------------------------")
+                print("------------------------>")
+                print(removed)
+                print("------------------------>")
+            else:
+                print("------------------------------------------------")
+                print("Snack removal canceled.")
+                print("------------------------------------------------")
+        else:
+            print("------------------------------------------------")
+            print("No matching snacks found in the inventory.")
+            print("------------------------------------------------")
+
     def get_all_snacks(self):
         snack_details = []
-        for snack in self.snacks:
-            snack_details.append(
-                f"ID: {snack.id}, Name: {snack.name}, Price: {snack.price}, Availability: {snack.available}, Quantity: {snack.quantity}")
+        for category, snacks in self.snacks.items():
+            for snack in self.snacks[category]:
+                snack_details.append(
+                    f" Catagory: {category} -> ID: {snack.id}, Name: {snack.name}, Price: {snack.price}, Availability: {snack.available}, Quantity: {snack.quantity}")
         return snack_details
 
     def record_sale(self, snack_id, quantity_sold):
