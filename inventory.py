@@ -1,6 +1,6 @@
 # Inventory Management
 
-from main import Snack
+from main import Snack, AdminRole,CanteenStaffRole,CashierRole
 from sales import SalesRecord
 import pyfiglet
 
@@ -14,7 +14,33 @@ class Inventory:
     def __init__(self):
         self.snacks = []
         self.sales_records = []
-        self.load_inventory_from_file("inventory_data.txt")
+        self.current_user_role = None
+        self.load_inventory_from_file("inventory_data.txt") 
+
+    def set_current_user_role(self, user_role):
+        self.current_user_role = user_role
+
+    def can_add_snack(self):
+        if self.current_user_role:
+            return self.current_user_role.can_add_snack()
+        return False
+
+    def can_update_snack(self):
+        if self.current_user_role:
+            return self.current_user_role.can_update_snack()
+        return False
+
+    def can_remove_snack(self):
+        if self.current_user_role:
+            return self.current_user_role.can_remove_snack()
+        return False
+
+    def can_record_sale(self):
+        if self.current_user_role:
+            return self.current_user_role.can_record_sale()
+        return False
+    
+
 
     def addSnack(self, id, name, price, availability, quantity):
         for snack in self.snacks:

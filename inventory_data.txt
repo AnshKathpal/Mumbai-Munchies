@@ -1,1 +1,1 @@
-1,Chips,20.0,True,20
+1,Chips,20.0,True,10
