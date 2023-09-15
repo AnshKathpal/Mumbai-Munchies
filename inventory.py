@@ -107,8 +107,14 @@ class Inventory:
                     id = int(id)
                     price = float(price)
                     quantity = int(quantity)
-                    snack = Snack(id, name, price, available, quantity)
-                    self.snacks.append(snack)
+                    snack_exists = False
+                    for snack in self.snacks:
+                        if snack.id == id:
+                            snack_exists = True
+                            break
+                    if not snack_exists:
+                       snack = Snack(id, name, price, available, quantity)
+                       self.snacks.append(snack)
         except FileNotFoundError:
             pass
 
