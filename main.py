@@ -1,16 +1,19 @@
-class AdminRole: 
+class AdminRole:
     def __init__(self):
         self.role_name = "Admin"
 
     def can_add_snack(self):
         return True
+
     def can_update_snack(self):
         return True
+
     def can_remove_snack(self):
         return True
+
     def can_record_sale(self):
         return True
-    
+
 
 class CanteenStaffRole:
     def __init__(self):
@@ -26,8 +29,8 @@ class CanteenStaffRole:
         return False
 
     def can_record_sale(self):
-        return False    
-    
+        return False
+
 
 class CashierRole:
     def __init__(self):
@@ -44,7 +47,7 @@ class CashierRole:
 
     def can_record_sale(self):
         return True
-    
+
 
 def select_user_role():
     while True:
@@ -64,12 +67,12 @@ def select_user_role():
             return CashierRole()
         else:
             print("--------------------------------------------------")
-            print("Invalid role choice. Please select a valid role.")  
-            print("--------------------------------------------------")  
+            print("Invalid role choice. Please select a valid role.")
+            print("--------------------------------------------------")
 
 
 class Snack:
-    def __init__(self, id, name, price, availability, quantity,category):
+    def __init__(self, id, name, price, availability, quantity, category):
         self.id = id
         self.name = name
         self.price = price
@@ -77,12 +80,12 @@ class Snack:
         self.quantity = quantity
         self.category = category
 
-    def update_availability(self,updated_availability, updated_quantity):
+    def update_availability(self, updated_availability, updated_quantity):
         self.available = updated_availability
         self.quantity = updated_quantity
 
     def get_details(self):
         return f"Snack(Snack_Id={self.id}, Snack Name={self.name}, Snack Price={self.price}, Snack Availability={self.availability} Snack Quantity = {self.quantity})"
-    
+
     def __str__(self):
         return self.get_details()
