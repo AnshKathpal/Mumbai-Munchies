@@ -1,0 +1,2 @@
+1,Chips,20.0,True,30,snacks
+2,Kurkure,10.0,True,50,snacks
