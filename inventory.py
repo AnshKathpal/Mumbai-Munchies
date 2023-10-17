@@ -7,7 +7,7 @@ import pyfiglet
 added = pyfiglet.figlet_format("Snack Added")
 already = pyfiglet.figlet_format("Snack Already Exists")
 removed = pyfiglet.figlet_format("Snack Removed")
-sale = pyfiglet.figlet_format("Snack Sold")
+sale = pyfiglet.figlet_format("Snack Sold") 
 
 
 class Inventory:
